@@ -1,6 +1,5 @@
 import streamlit as st
 import numpy as np
-import pandas as pd
 
 # Configure page
 st.set_page_config(
@@ -168,47 +167,61 @@ with col1:
     sample_r_s = [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 7.5, 10.0, 15.0, 20.0, 25.0]
     sample_k = [calculate_k_factor(rs) for rs in sample_r_s]
     
-    # Create analysis dataframe
-    analysis_df = pd.DataFrame({
-        'r/s Ratio': sample_r_s,
-        'K-Factor': sample_k,
-        'Difference from 0.5': [0.5 - k for k in sample_k],
-        'Material Behavior': ['Soft' if k < 0.35 else 'Medium' if k < 0.45 else 'Hard' for k in sample_k]
-    })
+    # Create analysis data manually
+    st.markdown("**K-Factor Analysis Table:**")
     
-    # Highlight user's calculation
-    if r_s is not None and k_factor is not None:
-        # Add user's calculation to the dataframe
-        user_row = {
-            'r/s Ratio': r_s,
-            'K-Factor': k_factor,
-            'Difference from 0.5': 0.5 - k_factor,
-            'Material Behavior': 'Your Input ⭐'
-        }
-        
-        # Insert user row in appropriate position
-        insert_pos = 0
-        for i, rs_val in enumerate(sample_r_s):
-            if r_s <= rs_val:
-                insert_pos = i
-                break
-            insert_pos = i + 1
-        
-        # Create new dataframe with user's data inserted
-        analysis_list = analysis_df.to_dict('records')
-        analysis_list.insert(insert_pos, user_row)
-        analysis_df = pd.DataFrame(analysis_list)
+    # Table header
+    col_rs, col_k, col_diff, col_behavior = st.columns([1, 1, 1, 1.5])
+    with col_rs:
+        st.markdown("**r/s Ratio**")
+    with col_k:
+        st.markdown("**K-Factor**")
+    with col_diff:
+        st.markdown("**Diff from 0.5**")
+    with col_behavior:
+        st.markdown("**Material Behavior**")
     
-    # Display the analysis table
-    st.dataframe(
-        analysis_df.style.format({
-            'r/s Ratio': '{:.2f}',
-            'K-Factor': '{:.4f}',
-            'Difference from 0.5': '{:.4f}'
-        }).highlight_max(subset=['K-Factor'], color='lightgreen')
-        .highlight_min(subset=['K-Factor'], color='lightcoral'),
-        use_container_width=True
-    )
+    st.markdown("---")
+    
+    # Add user's calculation if it exists
+    user_added = False
+    for i, rs_val in enumerate(sample_r_s):
+        # Insert user's calculation in appropriate position
+        if not user_added and r_s is not None and r_s <= rs_val:
+            col_rs, col_k, col_diff, col_behavior = st.columns([1, 1, 1, 1.5])
+            with col_rs:
+                st.markdown(f"**{r_s:.2f} ⭐**")
+            with col_k:
+                st.markdown(f"**{k_factor:.4f}**")
+            with col_diff:
+                st.markdown(f"**{0.5 - k_factor:.4f}**")
+            with col_behavior:
+                st.markdown("**Your Input**")
+            user_added = True
+        
+        # Regular table row
+        col_rs, col_k, col_diff, col_behavior = st.columns([1, 1, 1, 1.5])
+        with col_rs:
+            st.write(f"{rs_val:.1f}")
+        with col_k:
+            st.write(f"{sample_k[i]:.4f}")
+        with col_diff:
+            st.write(f"{0.5 - sample_k[i]:.4f}")
+        with col_behavior:
+            behavior = 'Soft' if sample_k[i] < 0.35 else 'Medium' if sample_k[i] < 0.45 else 'Hard'
+            st.write(behavior)
+    
+    # Add user's calculation at the end if r/s is very high
+    if not user_added and r_s is not None:
+        col_rs, col_k, col_diff, col_behavior = st.columns([1, 1, 1, 1.5])
+        with col_rs:
+            st.markdown(f"**{r_s:.2f} ⭐**")
+        with col_k:
+            st.markdown(f"**{k_factor:.4f}**")
+        with col_diff:
+            st.markdown(f"**{0.5 - k_factor:.4f}**")
+        with col_behavior:
+            st.markdown("**Your Input**")
     
     # K-Factor trends explanation
     st.markdown("### 📈 K-Factor Trends")
@@ -240,64 +253,79 @@ with col2:
     
     # Material comparison
     if st.button("Compare Materials"):
-        comparison_data = []
+        st.markdown("**Material Comparison:**")
         for mat, props in MATERIALS.items():
-            comparison_data.append({
-                'Material': mat,
-                'Typical K-Factor': props['typical_k'],
-                'Description': props['description']
-            })
-        
-        df = pd.DataFrame(comparison_data)
-        st.dataframe(df, use_container_width=True)
+            st.write(f"• **{mat}**: K={props['typical_k']} - {props['description']}")
     
     # Export functionality
     st.markdown("### 💾 Export Options")
     
     if st.button("Generate Report"):
-        report_data = {
-            'Parameter': ['Inner Radius (r)', 'Sheet Thickness (s)', 'r/s Ratio', 'K-Factor'],
-            'Value': [f'{r:.3f} {unit}', f'{s:.3f} {unit}', f'{r_s:.3f}', f'{k_factor:.4f}'],
-        }
+        st.markdown("**📋 Calculation Report:**")
+        st.write(f"• **Inner Radius (r)**: {r:.3f} {unit}")
+        st.write(f"• **Sheet Thickness (s)**: {s:.3f} {unit}")
+        st.write(f"• **r/s Ratio**: {r_s:.3f}")
+        st.write(f"• **K-Factor**: {k_factor:.4f}")
         
         if show_advanced and 'bend_allowance' in locals():
-            report_data['Parameter'].extend(['Bend Angle', 'Bend Allowance', 'Bend Deduction'])
-            report_data['Value'].extend([f'{bend_angle:.1f}°', f'{bend_allowance:.3f} {unit}', f'{bend_deduction:.3f} {unit}'])
+            st.write(f"• **Bend Angle**: {bend_angle:.1f}°")
+            st.write(f"• **Bend Allowance**: {bend_allowance:.3f} {unit}")
+            st.write(f"• **Bend Deduction**: {bend_deduction:.3f} {unit}")
         
-        report_df = pd.DataFrame(report_data)
-        st.dataframe(report_df, use_container_width=True)
+        # Create downloadable report text
+        report_text = f"""K-Factor Calculation Report
+=====================================
+Inner Radius (r): {r:.3f} {unit}
+Sheet Thickness (s): {s:.3f} {unit}
+r/s Ratio: {r_s:.3f}
+K-Factor: {k_factor:.4f}"""
         
-        # CSV download
-        csv = report_df.to_csv(index=False)
+        if show_advanced and 'bend_allowance' in locals():
+            report_text += f"""
+Bend Angle: {bend_angle:.1f}°
+Bend Allowance: {bend_allowance:.3f} {unit}
+Bend Deduction: {bend_deduction:.3f} {unit}"""
+        
         st.download_button(
-            label="📥 Download as CSV",
-            data=csv,
-            file_name=f"k_factor_calculation_{r}x{s}.csv",
-            mime="text/csv"
+            label="📥 Download Report",
+            data=report_text,
+            file_name=f"k_factor_calculation_{r}x{s}.txt",
+            mime="text/plain"
         )
 
 # Reference table
 st.markdown("---")
 st.subheader("📚 K-Factor Reference Table")
 
-# Convert to DataFrame for better display
-df = pd.DataFrame(table_data)
-df.columns = ['r/s Ratio', 'K-Factor']
+# Create manual table display
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown("**r/s Ratio**")
+    for rs in table_data['r/s']:
+        st.write(f"{rs}")
+
+with col2:
+    st.markdown("**K-Factor**")
+    for k in table_data['k']:
+        st.write(f"{k}")
 
 # Add comparison with calculated values
 if r_s is not None:
     # Find closest r/s value in table
-    closest_idx = np.argmin(np.abs(np.array(table_data['r/s']) - r_s))
+    closest_idx = 0
+    min_diff = abs(table_data['r/s'][0] - r_s)
+    for i, rs_val in enumerate(table_data['r/s']):
+        diff = abs(rs_val - r_s)
+        if diff < min_diff:
+            min_diff = diff
+            closest_idx = i
+    
     closest_r_s = table_data['r/s'][closest_idx]
     closest_k = table_data['k'][closest_idx]
     
     st.info(f"**Closest table value**: r/s = {closest_r_s}, K-factor = {closest_k}")
     st.info(f"**Your calculation**: r/s = {r_s:.3f}, K-factor = {k_factor:.4f}")
     st.info(f"**Difference**: {abs(k_factor - closest_k):.4f}")
-
-# Display table with highlighting
-styled_df = df.style.format({'r/s Ratio': '{:.1f}', 'K-Factor': '{:.3f}'})
-st.dataframe(styled_df, use_container_width=True)
 
 # Footer with tips
 st.markdown("---")
