@@ -1,6 +1,5 @@
 import streamlit as st
 import numpy as np
-import plotly.graph_objects as go
 import pandas as pd
 
 # Configure page
@@ -75,16 +74,22 @@ table_data = {
 }
 
 # App header
-
-# Footer with tips
-st.markdown("---")
-with st.expander("🔧 K-Factor Calculator for Sheet Metal Bending"):
-    st.markdown("""
-    represents the location of the neutral axis in a bent sheet metal part. 
-    It's crucial for calculating accurate bend allowances and flat pattern dimensions.
-    """)
-
 st.markdown('<h1 class="main-header">🔧 K-Factor Calculator for Sheet Metal Bending</h1>', unsafe_allow_html=True)
+
+# Information section
+with st.expander("ℹ️ What is K-Factor?", expanded=False):
+    st.markdown("""
+    <div class="info-box">
+    <strong>K-Factor</strong> represents the location of the neutral axis in a bent sheet metal part. 
+    It's crucial for calculating accurate bend allowances and flat pattern dimensions.
+    
+    <ul>
+    <li><strong>K-Factor = 0.5</strong>: Neutral axis at the center of material thickness</li>
+    <li><strong>K-Factor < 0.5</strong>: Neutral axis closer to inside radius (typical for most materials)</li>
+    <li><strong>r/s ratio</strong>: Inner bend radius divided by sheet thickness</li>
+    </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Main input section
 col1, col2, col3 = st.columns([1, 1, 1])
@@ -152,73 +157,83 @@ else:
     k_factor = None
     r_s = None
 
-# Interactive plotting section
+# K-Factor Analysis section
 st.markdown("---")
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    st.subheader("📊 K-Factor Visualization")
+    st.subheader("📊 K-Factor Analysis")
     
-    # Plot range controls
-    plot_col1, plot_col2 = st.columns(2)
-    with plot_col1:
-        x_max = st.slider("Maximum r/s ratio", 5.0, 50.0, 25.0, 5.0)
-    with plot_col2:
-        show_grid = st.checkbox("Show Grid", True)
+    # Generate sample data for tabular visualization
+    sample_r_s = [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 7.5, 10.0, 15.0, 20.0, 25.0]
+    sample_k = [calculate_k_factor(rs) for rs in sample_r_s]
     
-    # Generate curve data
-    x_vals = np.linspace(0, x_max, 200)
-    y_vals = [calculate_k_factor(x) for x in x_vals]
+    # Create analysis dataframe
+    analysis_df = pd.DataFrame({
+        'r/s Ratio': sample_r_s,
+        'K-Factor': sample_k,
+        'Difference from 0.5': [0.5 - k for k in sample_k],
+        'Material Behavior': ['Soft' if k < 0.35 else 'Medium' if k < 0.45 else 'Hard' for k in sample_k]
+    })
     
-    fig = go.Figure()
+    # Highlight user's calculation
+    if r_s is not None and k_factor is not None:
+        # Add user's calculation to the dataframe
+        user_row = {
+            'r/s Ratio': r_s,
+            'K-Factor': k_factor,
+            'Difference from 0.5': 0.5 - k_factor,
+            'Material Behavior': 'Your Input ⭐'
+        }
+        
+        # Insert user row in appropriate position
+        insert_pos = 0
+        for i, rs_val in enumerate(sample_r_s):
+            if r_s <= rs_val:
+                insert_pos = i
+                break
+            insert_pos = i + 1
+        
+        # Create new dataframe with user's data inserted
+        analysis_list = analysis_df.to_dict('records')
+        analysis_list.insert(insert_pos, user_row)
+        analysis_df = pd.DataFrame(analysis_list)
     
-    # Main curve
-    fig.add_trace(go.Scatter(
-        x=x_vals,
-        y=y_vals,
-        mode='lines',
-        name='K-Factor Curve',
-        line=dict(color='#2E86AB', width=3),
-        hovertemplate='r/s: %{x:.2f}<br>K-Factor: %{y:.4f}<extra></extra>'
-    ))
-    
-    # Table data points
-    fig.add_trace(go.Scatter(
-        x=table_data['r/s'],
-        y=table_data['k'],
-        mode='markers',
-        name='Reference Data',
-        marker=dict(size=8, color='#FF6B6B', symbol='circle'),
-        hovertemplate='r/s: %{x}<br>K-Factor: %{y}<extra></extra>'
-    ))
-    
-    # User input point
-    if k_factor is not None and r_s is not None:
-        fig.add_trace(go.Scatter(
-            x=[r_s],
-            y=[k_factor],
-            mode='markers',
-            name='Your Calculation',
-            marker=dict(size=15, color='#4ECDC4', symbol='star', line=dict(color='white', width=2)),
-            hovertemplate=f'Your Input<br>r/s: {r_s:.3f}<br>K-Factor: {k_factor:.4f}<extra></extra>'
-        ))
-    
-    fig.update_layout(
-        xaxis_title="r/s Ratio (Inner Bend Radius / Sheet Thickness)",
-        yaxis_title="K-Factor",
-        yaxis_range=[0.25, 0.55],
-        xaxis_range=[0, x_max],
-        showlegend=True,
-        height=500,
-        template="plotly_white",
-        hovermode='closest'
+    # Display the analysis table
+    st.dataframe(
+        analysis_df.style.format({
+            'r/s Ratio': '{:.2f}',
+            'K-Factor': '{:.4f}',
+            'Difference from 0.5': '{:.4f}'
+        }).highlight_max(subset=['K-Factor'], color='lightgreen')
+        .highlight_min(subset=['K-Factor'], color='lightcoral'),
+        use_container_width=True
     )
     
-    if show_grid:
-        fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
-        fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    # K-Factor trends explanation
+    st.markdown("### 📈 K-Factor Trends")
+    col_a, col_b, col_c = st.columns(3)
     
-    st.plotly_chart(fig, use_container_width=True)
+    with col_a:
+        st.metric(
+            "Low r/s (< 1.0)",
+            "K ≈ 0.33-0.42",
+            "Sharp bends"
+        )
+    
+    with col_b:
+        st.metric(
+            "Medium r/s (1.0-5.0)",
+            "K ≈ 0.42-0.48",
+            "Gradual transition"
+        )
+    
+    with col_c:
+        st.metric(
+            "High r/s (> 5.0)",
+            "K ≈ 0.48-0.50",
+            "Large radius bends"
+        )
 
 with col2:
     st.subheader("📋 Quick Reference")
