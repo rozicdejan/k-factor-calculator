@@ -16,78 +16,79 @@ st.set_page_config(
 # ─── Design System ──────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #0d0f14;
-    color: #e2e8f0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8faf8;
+    color: #1a2e1a;
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0d0f14; }
-::-webkit-scrollbar-thumb { background: #2a3448; border-radius: 3px; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f0f5f0; }
+::-webkit-scrollbar-thumb { background: #b6d4b6; border-radius: 3px; }
 
 /* ── Header ── */
 .app-header {
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 32px 0 8px;
-    border-bottom: 1px solid #1e2736;
-    margin-bottom: 32px;
+    gap: 16px;
+    padding: 28px 0 16px;
+    border-bottom: 2px solid #d4ead4;
+    margin-bottom: 28px;
 }
 .header-icon {
-    width: 52px; height: 52px;
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    border-radius: 12px;
+    width: 48px; height: 48px;
+    background: #16a34a;
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 8px 24px rgba(249,115,22,0.35);
+    font-size: 22px;
+    box-shadow: 0 4px 16px rgba(22,163,74,0.22);
     flex-shrink: 0;
 }
 .header-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.9rem;
-    font-weight: 800;
-    color: #f1f5f9;
-    line-height: 1.1;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111d11;
+    line-height: 1.15;
     margin: 0;
 }
 .header-sub {
-    font-size: 0.82rem;
-    color: #64748b;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #6b9e6b;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.09em;
+    margin-top: 3px;
 }
 
 /* ── Section labels ── */
 .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
     font-weight: 500;
-    letter-spacing: 0.12em;
-    color: #f97316;
+    letter-spacing: 0.14em;
+    color: #16a34a;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 /* ── Cards ── */
 .card {
-    background: #131720;
-    border: 1px solid #1e2736;
-    border-radius: 14px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
+    background: #ffffff;
+    border: 1px solid #d4ead4;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(22,163,74,0.06);
 }
-.card-orange {
-    background: linear-gradient(135deg, #1a1208, #1e1510);
-    border: 1px solid #7c3012;
+.card-green {
+    background: #f0faf0;
+    border: 1px solid #86c986;
 }
 
 /* ── KPI tiles ── */
@@ -95,83 +96,86 @@ html, body, [class*="css"] {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin: 24px 0;
+    margin: 20px 0;
 }
 .kpi-tile {
-    background: #131720;
-    border: 1px solid #1e2736;
+    background: #ffffff;
+    border: 1px solid #d4ead4;
     border-radius: 12px;
     padding: 18px 20px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 1px 4px rgba(22,163,74,0.07);
 }
 .kpi-tile::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #f97316, #fb923c);
+    background: linear-gradient(90deg, #16a34a, #4ade80);
     border-radius: 12px 12px 0 0;
 }
-.kpi-tile.highlight { border-color: #7c3012; }
-.kpi-tile.highlight::before { background: linear-gradient(90deg, #ea580c, #f97316); }
+.kpi-tile.highlight { border-color: #16a34a; box-shadow: 0 2px 12px rgba(22,163,74,0.15); }
+.kpi-tile.highlight::before { background: #16a34a; }
 .kpi-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: #64748b;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    color: #6b9e6b;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin-bottom: 8px;
 }
 .kpi-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.8rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: #111d11;
     line-height: 1;
 }
-.kpi-value.orange { color: #f97316; }
+.kpi-value.green { color: #16a34a; }
 .kpi-unit {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: #475569;
-    margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: #9ab89a;
+    margin-top: 5px;
 }
 
 /* ── Info callout ── */
 .callout {
-    background: #0f1829;
-    border: 1px solid #1e3a5f;
-    border-left: 4px solid #3b82f6;
+    background: #f0faf0;
+    border: 1px solid #bbdcbb;
+    border-left: 4px solid #16a34a;
     border-radius: 8px;
-    padding: 14px 18px;
-    margin: 12px 0;
-    font-size: 0.84rem;
-    color: #94a3b8;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 0.83rem;
+    color: #2d4a2d;
     line-height: 1.6;
 }
 .callout.warn {
-    background: #130f07;
-    border-color: #92400e;
-    border-left-color: #f59e0b;
+    background: #fffbeb;
+    border-color: #fde68a;
+    border-left-color: #d97706;
+    color: #7c5700;
 }
 .callout.success {
-    background: #071310;
-    border-color: #065f46;
-    border-left-color: #10b981;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    border-left-color: #16a34a;
+    color: #14532d;
 }
 
 /* ── Formula display ── */
 .formula {
-    background: #0a0c10;
-    border: 1px solid #1e2736;
+    background: #f4faf4;
+    border: 1px solid #d4ead4;
     border-radius: 8px;
     padding: 14px 18px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    color: #a78bfa;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #166534;
     margin: 8px 0;
-    line-height: 1.8;
+    line-height: 1.9;
 }
 
 /* ── Status badge ── */
@@ -179,66 +183,70 @@ html, body, [class*="css"] {
     display: inline-block;
     padding: 3px 10px;
     border-radius: 99px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.67rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
 }
-.badge-soft  { background: #1e3a5f; color: #60a5fa; }
-.badge-med   { background: #1a2e1a; color: #4ade80; }
-.badge-hard  { background: #3b1c1c; color: #f87171; }
-.badge-good  { background: #1a2e1a; color: #4ade80; }
-.badge-warn  { background: #3b2c1c; color: #fbbf24; }
-.badge-user  { background: #2a1a0a; color: #f97316; }
+.badge-soft  { background: #dbeafe; color: #1d4ed8; }
+.badge-med   { background: #dcfce7; color: #15803d; }
+.badge-hard  { background: #fee2e2; color: #b91c1c; }
+.badge-good  { background: #dcfce7; color: #15803d; }
+.badge-warn  { background: #fef9c3; color: #a16207; }
+.badge-user  { background: #dcfce7; color: #166534; }
 
 /* ── Streamlit widget overrides ── */
 div[data-testid="stNumberInput"] > div > div > input,
-div[data-testid="stSelectbox"] > div > div,
-div[data-testid="stMultiSelect"] > div > div {
-    background-color: #0d0f14 !important;
-    border-color: #1e2736 !important;
-    color: #e2e8f0 !important;
+div[data-testid="stSelectbox"] > div > div {
+    background-color: #ffffff !important;
+    border-color: #d4ead4 !important;
+    color: #1a2e1a !important;
     border-radius: 8px !important;
 }
 div[data-testid="stNumberInput"] > div > div > input:focus {
-    border-color: #f97316 !important;
-    box-shadow: 0 0 0 2px rgba(249,115,22,0.2) !important;
+    border-color: #16a34a !important;
+    box-shadow: 0 0 0 2px rgba(22,163,74,0.18) !important;
 }
-.stCheckbox > label { color: #94a3b8 !important; }
+.stCheckbox > label { color: #2d4a2d !important; font-size: 0.88rem !important; }
 .stButton > button {
-    background: linear-gradient(135deg, #ea580c, #f97316) !important;
+    background: #16a34a !important;
     color: white !important;
     border: none !important;
     border-radius: 8px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-weight: 500 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 600 !important;
     padding: 8px 20px !important;
-    transition: opacity 0.2s !important;
+    transition: background 0.2s !important;
 }
-.stButton > button:hover { opacity: 0.88 !important; }
+.stButton > button:hover { background: #15803d !important; }
 .stDownloadButton > button {
-    background: #1e2736 !important;
-    color: #94a3b8 !important;
-    border: 1px solid #2a3448 !important;
+    background: #f0faf0 !important;
+    color: #16a34a !important;
+    border: 1px solid #d4ead4 !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
 }
 div[data-testid="stExpander"] {
-    background: #131720 !important;
-    border: 1px solid #1e2736 !important;
+    background: #ffffff !important;
+    border: 1px solid #d4ead4 !important;
     border-radius: 10px !important;
 }
 div[data-testid="metric-container"] {
-    background: #131720;
-    border: 1px solid #1e2736;
+    background: #ffffff;
+    border: 1px solid #d4ead4;
     border-radius: 10px;
     padding: 14px 16px;
 }
-[data-testid="stMetricValue"] { color: #f1f5f9 !important; font-family: 'Syne', sans-serif !important; }
-[data-testid="stMetricLabel"] { color: #64748b !important; font-family: 'DM Mono', monospace !important; font-size: 0.7rem !important; }
-[data-testid="stMetricDelta"] { font-size: 0.72rem !important; }
+[data-testid="stMetricValue"] { color: #111d11 !important; font-family: 'Plus Jakarta Sans', sans-serif !important; font-weight: 700 !important; }
+[data-testid="stMetricLabel"] { color: #6b9e6b !important; font-family: 'IBM Plex Mono', monospace !important; font-size: 0.68rem !important; }
 
-hr { border-color: #1e2736 !important; }
-h1, h2, h3 { font-family: 'Syne', sans-serif !important; color: #f1f5f9 !important; }
-.stDataFrame { border: 1px solid #1e2736 !important; border-radius: 10px !important; }
+hr { border-color: #d4ead4 !important; }
+h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif !important; color: #111d11 !important; }
+.stDataFrame { border: 1px solid #d4ead4 !important; border-radius: 10px !important; }
+label { color: #2d4a2d !important; font-size: 0.85rem !important; }
+p, li { color: #2d4a2d; }
+.stRadio > label { color: #2d4a2d !important; }
+[data-testid="stSlider"] > div > div { color: #2d4a2d !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -408,7 +416,7 @@ with col_res:
       </div>
       <div class="kpi-tile highlight">
         <div class="kpi-label">K-Factor</div>
-        <div class="kpi-value orange">{K:.4f}</div>
+        <div class="kpi-value green">{K:.4f}</div>
         <div class="kpi-unit">neutral axis position</div>
       </div>
       <div class="kpi-tile">
@@ -443,8 +451,8 @@ with col_res:
         st.markdown(f"""
         <div class="card" style="margin-top:4px">
           <div class="section-label">Flat Pattern Length</div>
-          <div style="font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:700;color:#f97316;">{FL:.3f} <span style="font-size:1rem;color:#64748b">{unit_lbl}</span></div>
-          <div style="font-size:0.8rem;color:#475569;margin-top:6px;font-family:'DM Mono',monospace;">
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:2.2rem;font-weight:700;color:#16a34a;">{FL:.3f} <span style="font-size:1rem;color:#9ab89a">{unit_lbl}</span></div>
+          <div style="font-size:0.78rem;color:#6b9e6b;margin-top:6px;font-family:'IBM Plex Mono',monospace;">
             Flange A {leg1:.1f} + Flange B {leg2:.1f} + BA {BA:.3f} = {FL:.3f} {unit_lbl}
           </div>
         </div>
@@ -462,19 +470,19 @@ with col_res:
             st.markdown(f"""
             <div class="card">
               <div class="section-label">Springback</div>
-              <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:#fbbf24;">+{sb:.2f}°</div>
-              <div style="font-size:0.78rem;color:#475569;margin-top:4px;font-family:'DM Mono',monospace;">Overbend to: {overbend:.1f}°</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.6rem;font-weight:700;color:#d97706;">+{sb:.2f}°</div>
+              <div style="font-size:0.78rem;color:#6b9e6b;margin-top:4px;font-family:'IBM Plex Mono',monospace;">Overbend to: {overbend:.1f}°</div>
             </div>
             """, unsafe_allow_html=True)
         with col_sb2:
             rb_ok = r >= rb_min
-            rb_color = "#4ade80" if rb_ok else "#f87171"
+            rb_color = "#16a34a" if rb_ok else "#dc2626"
             rb_icon  = "✓" if rb_ok else "✗"
             st.markdown(f"""
             <div class="card">
               <div class="section-label">Min Bend Radius</div>
-              <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:{rb_color};">{rb_icon} {rb_min:.2f} {unit_lbl}</div>
-              <div style="font-size:0.78rem;color:#475569;margin-top:4px;font-family:'DM Mono',monospace;">Your r={r:.2f} — {'OK' if rb_ok else 'RISK OF CRACKING'}</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.6rem;font-weight:700;color:{rb_color};">{rb_icon} {rb_min:.2f} {unit_lbl}</div>
+              <div style="font-size:0.78rem;color:#6b9e6b;margin-top:4px;font-family:'IBM Plex Mono',monospace;">Your r={r:.2f} — {'OK' if rb_ok else 'RISK OF CRACKING'}</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -486,11 +494,11 @@ with col_res:
     st.markdown("""<div class="section-label" style="margin-top:20px">Method Comparison</div>""", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
     def method_tile(col, label, val, active):
-        border = "border-color:#f97316" if active else ""
+        border = "border-color:#16a34a;box-shadow:0 2px 10px rgba(22,163,74,0.15)" if active else ""
         col.markdown(f"""
         <div class="card" style="{border}">
-          <div style="font-size:0.68rem;font-family:'DM Mono',monospace;color:#64748b;letter-spacing:0.08em">{label}</div>
-          <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:{'#f97316' if active else '#94a3b8'}">{val:.4f}</div>
+          <div style="font-size:0.67rem;font-family:'IBM Plex Mono',monospace;color:#6b9e6b;letter-spacing:0.08em">{label}</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:700;color:{'#16a34a' if active else '#6b9e6b'}">{val:.4f}</div>
         </div>
         """, unsafe_allow_html=True)
     method_tile(c1, "Logistic fit",    k_log, method == "Logistic fit")
@@ -512,9 +520,9 @@ fig = make_subplots(rows=1, cols=2,
 
 # Left: K curves
 for arr, name, color, dash in [
-    (k_log_arr, "Logistic",    "#f97316", "solid"),
-    (k_ana_arr, "Wang-Wenner", "#a78bfa", "dash"),
-    (k_din_arr, "DIN 6935",    "#34d399", "dot"),
+    (k_log_arr, "Logistic",    "#16a34a", "solid"),
+    (k_ana_arr, "Wang-Wenner", "#7c3aed", "dash"),
+    (k_din_arr, "DIN 6935",    "#0891b2", "dot"),
 ]:
     fig.add_trace(go.Scatter(x=rs_range, y=arr, name=name,
                              line=dict(color=color, width=2, dash=dash),
@@ -524,27 +532,27 @@ for arr, name, color, dash in [
 # User point
 fig.add_trace(go.Scatter(x=[r_s], y=[K], name="Your calc",
                          mode="markers",
-                         marker=dict(color="#f97316", size=12, symbol="star",
+                         marker=dict(color="#16a34a", size=12, symbol="star",
                                      line=dict(color="white", width=2)),
                          hovertemplate=f"r/t={r_s:.3f}<br>K={K:.4f}<extra>Your calc</extra>"),
               row=1, col=1)
 
 # Ref line 0.5
-fig.add_hline(y=0.5, line=dict(color="#475569", dash="dot", width=1), row=1, col=1)
+fig.add_hline(y=0.5, line=dict(color="#9ab89a", dash="dot", width=1), row=1, col=1)
 
 # Right: BA vs angle
 angles = np.linspace(1, 180, 360)
 ba_arr = np.array([bend_allowance(K, a, r, t) for a in angles])
 fig.add_trace(go.Scatter(x=angles, y=ba_arr, name="Bend Allowance",
-                         line=dict(color="#38bdf8", width=2),
-                         fill="tozeroy", fillcolor="rgba(56,189,248,0.08)",
+                         line=dict(color="#16a34a", width=2),
+                         fill="tozeroy", fillcolor="rgba(22,163,74,0.08)",
                          hovertemplate="Angle=%{x}°<br>BA=%{y:.3f}<extra></extra>",
                          showlegend=False),
               row=1, col=2)
-fig.add_vline(x=bend_angle, line=dict(color="#f97316", dash="dot", width=1.5), row=1, col=2)
+fig.add_vline(x=bend_angle, line=dict(color="#16a34a", dash="dot", width=1.5), row=1, col=2)
 fig.add_trace(go.Scatter(x=[bend_angle], y=[BA], name="Current angle",
                          mode="markers",
-                         marker=dict(color="#f97316", size=10, symbol="circle",
+                         marker=dict(color="#16a34a", size=10, symbol="circle",
                                      line=dict(color="white", width=2)),
                          showlegend=False,
                          hovertemplate=f"{bend_angle}°<br>BA={BA:.3f}<extra></extra>"),
@@ -552,20 +560,20 @@ fig.add_trace(go.Scatter(x=[bend_angle], y=[BA], name="Current angle",
 
 fig.update_layout(
     height=360,
-    paper_bgcolor="#0d0f14",
-    plot_bgcolor="#131720",
-    font=dict(family="DM Sans", color="#94a3b8", size=12),
-    legend=dict(bgcolor="rgba(19,23,32,0.8)", bordercolor="#1e2736", borderwidth=1),
+    paper_bgcolor="#f8faf8",
+    plot_bgcolor="#ffffff",
+    font=dict(family="Plus Jakarta Sans", color="#4a6e4a", size=12),
+    legend=dict(bgcolor="rgba(255,255,255,0.9)", bordercolor="#d4ead4", borderwidth=1),
     margin=dict(l=10, r=10, t=40, b=10),
 )
 for ax in ["xaxis", "xaxis2", "yaxis", "yaxis2"]:
-    fig.update_layout(**{ax: dict(gridcolor="#1e2736", zerolinecolor="#1e2736", linecolor="#1e2736")})
+    fig.update_layout(**{ax: dict(gridcolor="#e8f5e8", zerolinecolor="#d4ead4", linecolor="#d4ead4")})
 
 fig.update_xaxes(title_text="r/t ratio", row=1, col=1)
 fig.update_yaxes(title_text="K-Factor", row=1, col=1, range=[0.28, 0.52])
 fig.update_xaxes(title_text="Bend angle (°)", row=1, col=2)
 fig.update_yaxes(title_text=f"Bend Allowance ({unit_lbl})", row=1, col=2)
-fig.update_annotations(font=dict(color="#94a3b8", size=12))
+fig.update_annotations(font=dict(color="#4a6e4a", size=12))
 
 st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
@@ -590,11 +598,11 @@ with col_t1:
     st.dataframe(
         df_ref.style
             .highlight_between(subset=["Logistic K","Analytical K","DIN 6935 K"],
-                                left=0.33, right=0.42, color="#1a2e1a")
+                                left=0.33, right=0.42, color="#dcfce7")
             .highlight_between(subset=["Logistic K","Analytical K","DIN 6935 K"],
-                                left=0.42, right=0.48, color="#2a2000")
+                                left=0.42, right=0.48, color="#fef9c3")
             .highlight_between(subset=["Logistic K","Analytical K","DIN 6935 K"],
-                                left=0.48, right=0.5,  color="#1a1a2e"),
+                                left=0.48, right=0.5,  color="#dbeafe"),
         use_container_width=True,
         hide_index=True,
     )
