@@ -514,7 +514,7 @@ fig1.update_xaxes(title_text="Bend angle (°)",   row=1, col=2)
 fig1.update_yaxes(title_text=f"Bend Allowance ({unit_lbl})", row=1, col=2)
 fig1.update_annotations(font=dict(color="#4a6e4a", size=12))
 
-st.plotly_chart(fig1, use_container_width=True, config=CHART_CONFIG)
+st.plotly_chart(fig1, width='stretch', config=CHART_CONFIG)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -554,7 +554,7 @@ with col_div:
     )
     fig_div.update_xaxes(**GRID_STYLE)
     fig_div.update_yaxes(**GRID_STYLE)
-    st.plotly_chart(fig_div, use_container_width=True, config=CHART_CONFIG)
+    st.plotly_chart(fig_div, width='stretch', config=CHART_CONFIG)
     st.markdown("""
     <div class="callout" style="font-size:0.79rem;">
     <b>Reading guide:</b> Peak divergence typically occurs at r/t 0.5–2.0.
@@ -693,7 +693,7 @@ with col_xsec:
     fig_xs.update_xaxes(title_text=unit_lbl)
     fig_xs.update_yaxes(title_text=unit_lbl)
 
-    st.plotly_chart(fig_xs, use_container_width=True, config=CHART_CONFIG)
+    st.plotly_chart(fig_xs, width='stretch', config=CHART_CONFIG)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -731,8 +731,8 @@ with hm_col1:
             [0.80, "#166534"],
             [1.0,  "#052e16"],
         ],
-        colorbar=dict(title=f"BA ({unit_lbl})", tickfont=dict(size=10),
-                      titlefont=dict(size=11), len=0.85),
+        colorbar=dict(title=dict(text=f"BA ({unit_lbl})", font=dict(size=11)),
+                      tickfont=dict(size=10), len=0.85),
         hovertemplate="r/t=%{x:.2f}<br>Angle=%{y:.0f}°<br>BA=%{z:.3f}<extra></extra>",
     ))
     # Crosshair lines
@@ -755,7 +755,7 @@ with hm_col1:
     )
     fig_hm_ba.update_xaxes(**GRID_STYLE)
     fig_hm_ba.update_yaxes(**GRID_STYLE)
-    st.plotly_chart(fig_hm_ba, use_container_width=True, config=CHART_CONFIG)
+    st.plotly_chart(fig_hm_ba, width='stretch', config=CHART_CONFIG)
 
 with hm_col2:
     # Precompute BD grid
@@ -778,8 +778,8 @@ with hm_col2:
             [0.85, "#92400e"],
             [1.0,  "#451a03"],
         ],
-        colorbar=dict(title=f"BD ({unit_lbl})", tickfont=dict(size=10),
-                      titlefont=dict(size=11), len=0.85),
+        colorbar=dict(title=dict(text=f"BD ({unit_lbl})", font=dict(size=11)),
+                      tickfont=dict(size=10), len=0.85),
         hovertemplate="r/t=%{x:.2f}<br>Angle=%{y:.0f}°<br>BD=%{z:.3f}<extra></extra>",
     ))
     fig_hm_bd.add_hline(y=bend_angle, line=dict(color="white", width=1.5, dash="dot"))
@@ -801,7 +801,7 @@ with hm_col2:
     )
     fig_hm_bd.update_xaxes(**GRID_STYLE)
     fig_hm_bd.update_yaxes(**GRID_STYLE)
-    st.plotly_chart(fig_hm_bd, use_container_width=True, config=CHART_CONFIG)
+    st.plotly_chart(fig_hm_bd, width='stretch', config=CHART_CONFIG)
 
 st.markdown("""
 <div class="callout" style="font-size:0.79rem;">
@@ -866,7 +866,7 @@ with col_sb_chart:
         )
         fig_sb.update_xaxes(**GRID_STYLE)
         fig_sb.update_yaxes(**GRID_STYLE)
-        st.plotly_chart(fig_sb, use_container_width=True, config=CHART_CONFIG)
+        st.plotly_chart(fig_sb, width='stretch', config=CHART_CONFIG)
     else:
         st.markdown("""
         <div class="callout warn" style="margin-top:30px">
@@ -922,7 +922,7 @@ with col_mat_bar:
         height=360, **PLOT_LAYOUT,
         bargap=0.28,
     )
-    st.plotly_chart(fig_mat, use_container_width=True, config=CHART_CONFIG)
+    st.plotly_chart(fig_mat, width='stretch', config=CHART_CONFIG)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -950,7 +950,7 @@ with col_t1:
                                 left=0.42, right=0.48, color="#fef9c3")
             .highlight_between(subset=["Logistic K", "Analytical K", "DIN 6935 K"],
                                 left=0.48, right=0.5,  color="#dbeafe"),
-        use_container_width=True, hide_index=True,
+        width='stretch', hide_index=True,
     )
     st.markdown(
         f'<div class="callout">Closest table row: r/t = {rs_table[closest_idx]} · '
@@ -971,7 +971,7 @@ with col_t2:
          "Min r factor":  p["min_rb_factor"]}
         for m, p in MATERIALS.items()
     ])
-    st.dataframe(df_mat, use_container_width=True, hide_index=True)
+    st.dataframe(df_mat, width='stretch', hide_index=True)
 
     st.markdown('<div class="section-label" style="margin-top:20px">Export</div>', unsafe_allow_html=True)
     report = f"""K-Factor Calculation Report
